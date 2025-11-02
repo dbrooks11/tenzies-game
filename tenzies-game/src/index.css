@@ -1,6 +1,6 @@
-*{
+/* *{
   border: solid 1px red;
-}
+} */
 
 
 body{
@@ -20,6 +20,7 @@ body{
   text-align: center;
   width: 50%;
   min-width: 470px;
+  margin-top: 90px;
 
 
 }
@@ -46,9 +47,21 @@ main{
   
 }
 
-#dice-btn{
+.dice-btn-unfrozen{
    box-shadow: var(--box-shadow);
    background-color: white;
+   font-weight: bold;
+   border:none;
+   border-radius: 10px;
+   height: 5em;
+   width: 5em;
+   font-family:Verdana, Geneva, Tahoma, sans-serif;
+   font-size: 1em;
+}
+
+.dice-btn-frozen{
+   box-shadow: var(--box-shadow);
+   background-color: #4EDD84;
    font-weight: bold;
    border:none;
    border-radius: 10px;

@@ -1,31 +1,59 @@
 import {useState, useEffect} from 'react'
+import diceData from '../../../dice'
 import Dice from './Dice'
 
 export default function Main() {
-    const dices = []
+    let [sameNum, setsameNum] = useState(null)
+        
+    const [dice, setdice] = useState(diceData);
 
-    for (let i = 0; i < 10; i++){
-        dices.push({
-            id: i + 1,
-            number: Math.floor(Math.random() * 11),
-            isFrozen: false
-        })
-    }
-
-    const diceObj = dices.map((die) =>{
-         return (
-           <Dice
+    const diceObj = dice.map((die) =>{
+           return (<Dice
             key = {die.id}
             id = {die.id}
             number = {die.number}
             isFrozen = {die.isFrozen}
-            />
-        )
+            freezeClick = {freezeClick}
+            />)
     })
 
-    const [dice, setdice] = useState(diceObj);
+    useEffect(() => {
+    const value = dice[0].number
+    const allSame = dice.every(die => die.number === value && die.isFrozen)
+    if (allSame && !sameNum) {
+        setsameNum(true)
+    }
+  }, [dice])
 
-    console.log(dice)
+
+    function freezeClick(id){
+        if(sameNum == null)
+        setdice(prevDice => prevDice.map(item =>{
+            return item.id === id ? {...item, isFrozen: !item.isFrozen} : item
+            }))
+
+    }
+
+    function rollDice(){
+        if(sameNum){
+            setdice((prevDice)=>{
+            return prevDice.map(prevDice => {
+                return prevDice.isFrozen ? { ...prevDice, isFrozen: false, number: Math.floor(Math.random() * 10) } : prevDice
+                })})
+            setsameNum(false)
+            }
+        else{
+        setdice((prevDice) =>{
+            return prevDice.map(prevDice => {
+               return prevDice.isFrozen ? prevDice : { ...prevDice, number: Math.floor(Math.random() * 10) }
+                })
+            })
+        }
+    }
+
+    console.log("rendered")
+
+    
 
   return (
     <>
@@ -33,9 +61,9 @@ export default function Main() {
         <main>
             <p>Roll until dice are the same. Click each die to freeze it at its current value between rolls.</p>
             <div className='dices-container'>
-                {dice}
+                {diceObj}
             </div>
-            <button id = "roll-btn">Roll</button>
+            <button onClick = {rollDice} id = "roll-btn">{sameNum ? "You win!" : "Roll"}</button>
         </main>
     </>
   )
